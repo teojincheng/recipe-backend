@@ -6,7 +6,10 @@ const Recipe = require("../models/recipe.model");
 const createRecipeItem = async (recipeData) => {
   await Recipe.init();
   const recipeDoc = Recipe(recipeData);
-  await recipeDoc.save();
+  let id = await recipeDoc.save(function (err, recipe) {
+    return recipe._id;
+  });
+  return id;
 };
 
 const getAllRecipeData = async () => {
@@ -19,10 +22,21 @@ router.get("/", async (req, res) => {
   res.status(200).send(collection);
 });
 
+router.get("/numberOfRecords", async (req, res) => {
+  const collection = await getAllRecipeData();
+  const countOfRecords = collection.length;
+  res.status(200).json(countOfRecords);
+});
+
 router.post("/", async (req, res, next) => {
   try {
-    await createRecipeItem(req.body);
-    res.status(201).send(req.body);
+    await Recipe.init();
+    const recipeDoc = Recipe(req.body);
+    recipeDoc.save(function (err, recipe) {
+      res.status(201).json(recipe._id);
+    });
+
+    //res.status(201).json(response);
   } catch (err) {
     next(err);
   }
