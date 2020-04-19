@@ -10,7 +10,7 @@ const createRecipeItem = async (recipeData) => {
 };
 
 const getAllRecipeData = async () => {
-  const recipesData = await Recipe.find({}, "-_id -__v");
+  const recipesData = await Recipe.find({}, "-__v");
   return recipesData;
 };
 
