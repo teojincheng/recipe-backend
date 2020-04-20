@@ -17,10 +17,14 @@ const getAllRecipeData = async () => {
   return recipesData;
 };
 
+const getRecipeById = async () => {};
+
 router.get("/", async (req, res) => {
   const collection = await getAllRecipeData();
   res.status(200).send(collection);
 });
+
+router.get("/:recipeId", async (req, res) => {});
 
 router.get("/numberOfRecords", async (req, res) => {
   const collection = await getAllRecipeData();
@@ -35,8 +39,6 @@ router.post("/", async (req, res, next) => {
     recipeDoc.save(function (err, recipe) {
       res.status(201).json(recipe._id);
     });
-
-    //res.status(201).json(response);
   } catch (err) {
     next(err);
   }
