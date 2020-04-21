@@ -15,6 +15,8 @@ app.get("/", (req, res) => {
 });
 
 const recipeRouter = require("./routes/recipe.route");
+const savedRecipeRouter = require("./routes/savedRecipe.route");
 app.use("/recipes", recipeRouter);
+app.use("/saved-recipes", savedRecipeRouter);
 
 module.exports = app;
