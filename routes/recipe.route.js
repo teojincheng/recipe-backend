@@ -17,14 +17,20 @@ const getAllRecipeData = async () => {
   return recipesData;
 };
 
-const getRecipeById = async () => {};
+const getRecipeById = async (id) => {
+  const recipeDoc = await Recipe.findById(id);
+  return recipeDoc;
+};
 
 router.get("/", async (req, res) => {
   const collection = await getAllRecipeData();
   res.status(200).send(collection);
 });
 
-router.get("/:recipeId", async (req, res) => {});
+router.get("/:recipeId", async (req, res) => {
+  const recipe = await getRecipeById(req.params.recipeId);
+  res.status(200).send(recipe);
+});
 
 router.get("/numberOfRecords", async (req, res) => {
   const collection = await getAllRecipeData();
