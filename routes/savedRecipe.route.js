@@ -12,7 +12,7 @@ const getSavedRecipeByUser = async (identify) => {};
 
 const saveOneRecipe = async (saveData) => {
   await SavedRecipe.init();
-  const doc = Recipe(saveData);
+  const doc = SavedRecipe(saveData);
   await doc.save();
 };
 
