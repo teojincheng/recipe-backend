@@ -17,14 +17,27 @@ const getAllRecipeData = async () => {
   return recipesData;
 };
 
+const getRecipesBySearchTerm = async (searchTerm) => {
+  const regex = new RegExp(searchTerm, "gi");
+  const correctRecipes = await Recipe.find({
+    $or: [{ name: regex }, { ingredients: regex }],
+  });
+  return correctRecipes;
+};
+
 const getRecipeById = async (id) => {
   const recipeDoc = await Recipe.findById(id);
   return recipeDoc;
 };
 
 router.get("/", async (req, res) => {
-  const collection = await getAllRecipeData();
-  res.status(200).send(collection);
+  if (req.query.searchTerm) {
+    const recipes = await getRecipesBySearchTerm(req.query.searchTerm);
+    res.status(200).send(recipes);
+  } else {
+    const collection = await getAllRecipeData();
+    res.status(200).send(collection);
+  }
 });
 
 router.get("/:recipeId", async (req, res) => {
