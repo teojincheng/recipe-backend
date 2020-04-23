@@ -13,7 +13,7 @@ const createRecipeItem = async (recipeData) => {
 };
 
 const getAllRecipeData = async () => {
-  const recipesData = await Recipe.find({}, "-__v");
+  const recipesData = await Recipe.find({}, "-__v").sort({ createdAt: -1 });
   return recipesData;
 };
 
