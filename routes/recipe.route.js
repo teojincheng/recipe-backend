@@ -17,6 +17,22 @@ const getAllRecipeData = async () => {
   return recipesData;
 };
 
+const getRecipesAccordingToSort = async (sortType) => {
+  let recipesData;
+  switch (sortType) {
+    case "oldest":
+      recipesData = await Recipe.find({}, "-__v").sort({ createdAt: 1 });
+      return recipesData;
+    case "name-descend":
+      recipesData = await Recipe.find({}, "-__v").sort({ name: -1 });
+      return recipesData;
+
+    case "name-ascend":
+      recipesData = await Recipe.find({}, "-__v").sort({ name: 1 });
+      return recipesData;
+  }
+};
+
 const getRecipesBySearchTerm = async (searchTerm) => {
   const regex = new RegExp(searchTerm, "gi");
   const correctRecipes = await Recipe.find({
@@ -33,6 +49,9 @@ const getRecipeById = async (id) => {
 router.get("/", async (req, res) => {
   if (req.query.searchTerm) {
     const recipes = await getRecipesBySearchTerm(req.query.searchTerm);
+    res.status(200).send(recipes);
+  } else if (req.query.sortType) {
+    const recipes = await getRecipesAccordingToSort(req.query.sortType);
     res.status(200).send(recipes);
   } else {
     const collection = await getAllRecipeData();
