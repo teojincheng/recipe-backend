@@ -34,6 +34,11 @@ mongoose: version 5.9.9
 `npm run start:dev`  
 Starts the Express server on localhost. 
 
+### ENV variables: 
+
+* process.env.PORT
+* process.env.FRONTEND_URL
+
 ## Future work: 
 * Write the unit test with supertest and mogodb memory server
 * Even more complex database queries
