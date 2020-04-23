@@ -20,6 +20,10 @@ const getAllRecipeData = async () => {
 const getRecipesAccordingToSort = async (sortType) => {
   let recipesData;
   switch (sortType) {
+    case "recent":
+      recipesData = await Recipe.find({}, "-__v").sort({ createdAt: -1 });
+      return recipesData;
+
     case "oldest":
       recipesData = await Recipe.find({}, "-__v").sort({ createdAt: 1 });
       return recipesData;
@@ -30,6 +34,46 @@ const getRecipesAccordingToSort = async (sortType) => {
     case "name-ascend":
       recipesData = await Recipe.find({}, "-__v").sort({ name: 1 });
       return recipesData;
+  }
+};
+
+const getRecipesSearchAndSort = async (searchTerm, sortType) => {
+  const regex = new RegExp(searchTerm, "gi");
+  let matchedData;
+  switch (sortType) {
+    case "recent":
+      matchedData = await Recipe.find(
+        {
+          $or: [{ name: regex }, { ingredients: regex }],
+        },
+        "-__v"
+      ).sort({ createdAt: -1 });
+      return matchedData;
+
+    case "oldest":
+      matchedData = await Recipe.find(
+        {
+          $or: [{ name: regex }, { ingredients: regex }],
+        },
+        "-__v"
+      ).sort({ createdAt: 1 });
+      return matchedData;
+    case "name-descend":
+      matchedData = await Recipe.find(
+        {
+          $or: [{ name: regex }, { ingredients: regex }],
+        },
+        "-__v"
+      ).sort({ name: -1 });
+      return matchedData;
+    case "name-ascend":
+      matchedData = await Recipe.find(
+        {
+          $or: [{ name: regex }, { ingredients: regex }],
+        },
+        "-__v"
+      ).sort({ name: 1 });
+      return matchedData;
   }
 };
 
@@ -47,7 +91,8 @@ const getRecipeById = async (id) => {
 };
 
 router.get("/", async (req, res) => {
-  if (req.query.searchTerm) {
+  if (req.query.searchTerm && req.query.sortType) {
+  } else if (req.query.searchTerm) {
     const recipes = await getRecipesBySearchTerm(req.query.searchTerm);
     res.status(200).send(recipes);
   } else if (req.query.sortType) {
