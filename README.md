@@ -40,7 +40,7 @@ Starts the Express server on localhost.
 * process.env.FRONTEND_URL
 
 ## Future work: 
-* Write the unit test with supertest and mogodb memory server
+* Write the unit tests with supertest and mongodb memory server
 * Even more complex database queries
 
 ### Front end repo  
